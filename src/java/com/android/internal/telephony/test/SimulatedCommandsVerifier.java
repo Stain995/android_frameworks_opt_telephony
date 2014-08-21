@@ -1380,4 +1380,14 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
     public void setOnCatSendSmsResult(Handler h, int what, Object obj) { // Samsung STK
 
     }
+
+    @Override
+    public void iccOpenLogicalChannel(String AID, byte p2, Message response) {
+
+    }
+
+    @Override
+    public void getAtr(Message response) {
+
+    }
 }
