@@ -757,6 +757,7 @@ public class SubscriptionController extends ISub.Stub {
                             // may not be true, for instance with multiple subs per slot.
                             // But is true at the moment.
                             sSlotIdxToSubId.put(slotId, subId);
+                            int subIdCountMax = getActiveSubInfoCountMax();
                             int simCount = PhoneFactory.getSubscriptionInfoUpdater()
                                     .getInsertedSimCount();
                             int defaultSubId = getDefaultSubId();
@@ -796,7 +797,7 @@ public class SubscriptionController extends ISub.Stub {
                                     .getPhoneCount()) {
                                 Rlog.i(LOG_TAG, "Subscription is invalid. Set default to " + subId);
                                 setDefaultSmsSubId(subId);
-                                PhoneFactory.setSMSPromptEnabled(true);
+                                PhoneFactory.setSMSPromptEnabled(subIdCountMax > 1);
                             }
 
                         } else {
@@ -846,6 +847,10 @@ public class SubscriptionController extends ISub.Stub {
             sPhones[slotId].updateDataConnectionTracker();
 
             if (DBG) logdl("[addSubInfoRecord]- info size=" + sSlotIdxToSubId.size());
+
+            if (sSlotIdxToSubId.size() <= 1) {
+                PhoneFactory.setSMSPromptEnabled(false);
+            }
 
         } finally {
             Binder.restoreCallingIdentity(identity);
